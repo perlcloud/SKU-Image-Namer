@@ -17,7 +17,13 @@ def cli():
     help="Name of new or existing project",
     prompt="Please enter a new or existing project name",
 )
-def log(project):
+@click.option(
+    "-d",
+    "--project-dir",
+    help="Alternate project directory",
+    type=click.Path(exists=True, file_okay=False, resolve_path=True),
+)
+def log(project, project_dir):
     """Keep a log of SKUs you are working on for later renaming use.
 
     \b
@@ -25,7 +31,7 @@ def log(project):
         Using a barcode scanner or your keyboard, enter the SKU you are currently working on when prompted.
         When you are done, enter any of the following: ["", "break", "end", "exit"].
     """
-    project = NamingProject(project)
+    project = NamingProject(project, project_dir)
     logger = SkuLogger(project)
     logger.run()
 
@@ -36,6 +42,12 @@ def log(project):
     "--project",
     help="Name of an existing project",
     prompt="Please enter a new or existing project name",
+)
+@click.option(
+    "-d",
+    "--project-dir",
+    help="Alternate project directory",
+    type=click.Path(exists=True, file_okay=False, resolve_path=True),
 )
 @click.option(
     "-f",
@@ -52,11 +64,11 @@ def log(project):
     default=False,
     show_default=True,
 )
-def rename(project, files_dir, recursive):
+def rename(project, project_dir, files_dir, recursive):
     """
     Rename files based on a log of SKUs
     """
-    project = NamingProject(project)
+    project = NamingProject(project, project_dir=project_dir)
     renamer = FileRename(project, files_dir, recursive=recursive)
     renamer.run()
 

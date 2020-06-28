@@ -105,10 +105,10 @@ class CSVLogger:
 class NamingProject:
     """Base project class, tracking project details and location"""
 
-    def __init__(self, project_name):
+    def __init__(self, project_name, project_dir=None):
         self.project_name = project_name
         self.project_stem = clean_filename(self.project_name)
-        self.project_dir = Path.cwd().joinpath(self.project_stem)
+        self.project_dir = Path(project_dir) if project_dir else Path.cwd().joinpath(self.project_stem)
 
         # Create the project folder if it does not exist
         self.project_dir.mkdir(exist_ok=True)
