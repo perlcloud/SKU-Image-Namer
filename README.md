@@ -28,7 +28,16 @@ This is accomplished by following this simple workflow:
 The advantages of this method is both the speed you can work at, and the 100% unobtrusive nature of the method, leaving the photography workflow alone.
 
 ---
-Future improvements planned:
+### Usage Instructions 
+##### Requirements:
+- Python 3.6 or later
+##### Setup
+- Download or clone this repo.
+- Add the required packages with `pip install -r requirements.txt`
+- Run `python3 sku_namer.py --help` for the help file.
+
+---
+Future improvement ideas:
 - Allow an optional tethered solution for renaming on the fly.
 - Allow input using logs from as outside source, allowing more flexibility for entering subject info.
 - Allow the input of a time offset to handle time differences between the logging device and camera.
