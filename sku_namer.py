@@ -25,12 +25,17 @@ def cli():
     type=click.Path(exists=True, file_okay=False, resolve_path=True),
 )
 def log(project, project_dir):
-    """Keep a log of SKUs you are working on for later renaming use.
+    """
+    Keep a log of SKUs you are working on for later use renaming.
 
     \b
     Instructions:
         Using a barcode scanner or your keyboard, enter the SKU you are currently working on when prompted.
         When you are done, enter any of the following: ["", "break", "end", "exit"].
+    \f
+    :param project:
+    :param project_dir:
+    :return:
     """
     project = NamingProject(project, project_dir)
     logger = SkuLogger(project)
@@ -74,6 +79,14 @@ def log(project, project_dir):
 def rename(project, project_dir, files_dir, recursive, offset):
     """
     Rename files based on a log of SKUs
+
+    \f
+    :param project:
+    :param project_dir:
+    :param files_dir:
+    :param recursive:
+    :param offset:
+    :return:
     """
     project = NamingProject(project, project_dir=project_dir)
     renamer = FileRename(project, files_dir, recursive=recursive, offset=offset)
@@ -83,8 +96,13 @@ def rename(project, project_dir, files_dir, recursive, offset):
 @cli.command()
 def offset_capture():
     """
-    Displays a clock with the current machine time
-    Photograph the clock with the camera being used
+    Displays a clock with the current machine time.
+
+    \b
+    Instructions:
+        Photograph the clock with the camera being used.
+    \f
+    :return:
     """
     Clock()
 
@@ -159,6 +177,17 @@ def offset_calc(image_path, timestamp, year, month, day, hour, minute, second, m
     """
     Calculate the difference between machine times.
     This value is used to tell the renaming script how much to offset the timestamps.
+    \f
+    :param image_path:
+    :param timestamp:
+    :param year:
+    :param month:
+    :param day:
+    :param hour:
+    :param minute:
+    :param second:
+    :param microsecond:
+    :return:
     """
     if not timestamp:
         if not minute:
