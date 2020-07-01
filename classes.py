@@ -3,7 +3,8 @@ import csv
 import string
 import unicodedata
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
+import time
 
 
 def clean_filename(filename):
@@ -280,11 +281,12 @@ class FileRename:
 
     files = None  # Files to rename
 
-    def __init__(self, project, files_dir, recursive=False):
+    def __init__(self, project, files_dir, recursive=False, offset=None):
         self.project = project
         self.files_dir = Path(files_dir)
         self.recursive = recursive
         self.sku_logger = SkuLogger(project)
+        self.offset = timedelta(seconds=float(offset)) if offset else offset
 
         self.log_file_path = self.project.project_dir.joinpath(
             f"{self.project.project_stem}_rename_log.{self.log_file_type}"
@@ -311,8 +313,10 @@ class FileRename:
 
         for file in self.files:
             # Locate record
-            last_modified = datetime.fromtimestamp(file.lstat().st_mtime)
-            sku_record = self.get_sku_by_timestamp(last_modified)
+            file_timestamp = datetime.fromtimestamp(file.lstat().st_mtime)
+            if self.offset:
+                file_timestamp += self.offset
+            sku_record = self.get_sku_by_timestamp(file_timestamp)
 
             # Rename _file according to SKU
             if sku_record:
@@ -338,3 +342,28 @@ class FileRename:
 
                 file.rename(rename_path)
                 print(f"Renamed: {file.name} >>> {rename_path.name}")
+
+
+class Clock:
+    def __init__(self, sleep=0.04):
+        while True:
+            now = datetime.now()
+            print("Photograph the following value with your camera: ", now, end="\r")
+            # print("This can be inserted into the offset-calc as:")
+            # print(f"-y {now.year} -m {now.month} -d {now.day} -h {now.hour} -M {now.minute} -s {now.second} -f {now.microsecond}")
+            # print(datetime.now(), end="\r")
+            time.sleep(sleep)
+
+
+class OffsetCalculator:
+
+    def __init__(self, image_path, timestamp):
+        self.image_path = Path(image_path)
+        self.file_timestamp = file_timestamp = datetime.fromtimestamp(self.image_path.lstat().st_mtime)
+        self.input_timestamp = input_timestamp = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
+
+        self.offset = input_timestamp - file_timestamp
+
+    @property
+    def as_seconds(self):
+        return self.offset.total_seconds()
