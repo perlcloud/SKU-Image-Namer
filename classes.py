@@ -269,6 +269,7 @@ class SkuLogger:
 
 
 class FileRename:
+    """Class for handling the renaming of files"""
 
     project = None  # NamingProject obj
     files_dir = None  # Location of the files to rename
@@ -345,17 +346,16 @@ class FileRename:
 
 
 class Clock:
+    """Clock class to display the machine time"""
     def __init__(self, sleep=0.04):
         while True:
             now = datetime.now()
             print("Photograph the following value with your camera: ", now, end="\r")
-            # print("This can be inserted into the offset-calc as:")
-            # print(f"-y {now.year} -m {now.month} -d {now.day} -h {now.hour} -M {now.minute} -s {now.second} -f {now.microsecond}")
-            # print(datetime.now(), end="\r")
             time.sleep(sleep)
 
 
 class OffsetCalculator:
+    """Calculate the offset between machine time and a cameras time"""
 
     def __init__(self, image_path, timestamp):
         self.image_path = Path(image_path)
